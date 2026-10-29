@@ -3,11 +3,13 @@
  * Enforces zero client financial trust, server-side paise math, and timing-safe verification.
  */
 const crypto = require('crypto');
+const mongoose = require('mongoose');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
 const TransactionReceipt = require('../models/TransactionReceipt');
 const { createRazorpayOrder, verifyPaymentSignature } = require('../services/razorpayService');
 const { sendReceiptEmail } = require('../services/emailService');
+const escapeRegex = require('../utils/escapeRegex');
 
 /**
  * POST /api/orders/create-order
@@ -160,6 +162,14 @@ exports.verifyPayment = async (req, res, next) => {
       });
     }
 
+    // Defensive validation for orderId format if provided
+    if (orderId && !mongoose.Types.ObjectId.isValid(orderId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid order identifier format'
+      });
+    }
+
     // 1. Locate Order
     const query = orderId ? { _id: orderId } : { razorpayOrderId: razorpay_order_id };
     const order = await Order.findOne(query);
@@ -171,7 +181,16 @@ exports.verifyPayment = async (req, res, next) => {
       });
     }
 
-    // 2. IDEMPOTENCY CHECK: If already marked PAID, return existing receipt without duplicate actions
+    // 2. CRITICAL SECURITY ASSERTION: Cross-Order Token Substitution Guard
+    // When verifying payments, ensure order.razorpayOrderId === razorpay_order_id is strictly asserted before marking order as PAID.
+    if (!order.razorpayOrderId || order.razorpayOrderId !== razorpay_order_id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Gateway order ID does not match order record'
+      });
+    }
+
+    // 3. IDEMPOTENCY CHECK: If already marked PAID, return existing receipt without duplicate actions
     if (order.status === 'PAID') {
       const existingReceipt = await TransactionReceipt.findOne({ orderId: order._id });
       return res.status(200).json({
@@ -259,27 +278,44 @@ exports.verifyPayment = async (req, res, next) => {
     // 6. Non-Blocking Email Dispatch
     sendReceiptEmail(order, receipt)
       .then(async (emailResult) => {
-        receipt.emailDeliveryStatus = emailResult.success ? 'SENT' : 'FAILED';
-        receipt.emailDeliveryDetails = {
-          sentAt: new Date(),
-          recipientEmail: order.customer.email,
-          messageId: emailResult.messageId || null,
-          error: emailResult.error || null
-        };
-        await receipt.save();
+        try {
+          await TransactionReceipt.findByIdAndUpdate(receipt._id, {
+            $set: {
+              emailDeliveryStatus: emailResult.success ? 'SENT' : 'FAILED',
+              emailDeliveryDetails: {
+                sentAt: new Date(),
+                recipientEmail: order.customer?.email || receipt.customerDetails?.email,
+                messageId: emailResult.messageId || null,
+                error: emailResult.error || null
+              }
+            }
+          });
 
-        order.receiptDispatched = emailResult.success;
-        order.receiptDispatchedAt = new Date();
-        await order.save();
+          await Order.findByIdAndUpdate(order._id, {
+            $set: {
+              receiptDispatched: emailResult.success,
+              receiptDispatchedAt: new Date()
+            }
+          });
+        } catch (saveErr) {
+          console.error('[orderController] Non-blocking receipt status update error:', saveErr.message);
+        }
       })
       .catch(async (err) => {
-        receipt.emailDeliveryStatus = 'FAILED';
-        receipt.emailDeliveryDetails = {
-          sentAt: new Date(),
-          recipientEmail: order.customer.email,
-          error: err.message
-        };
-        await receipt.save();
+        try {
+          await TransactionReceipt.findByIdAndUpdate(receipt._id, {
+            $set: {
+              emailDeliveryStatus: 'FAILED',
+              emailDeliveryDetails: {
+                sentAt: new Date(),
+                recipientEmail: order.customer?.email || receipt.customerDetails?.email,
+                error: err.message
+              }
+            }
+          });
+        } catch (innerErr) {
+          console.error('[orderController] Non-blocking email error logging failed:', innerErr.message);
+        }
       });
 
     // 7. Instant Response to Devotee
@@ -323,8 +359,9 @@ exports.getAdminOrders = async (req, res, next) => {
     const filter = {};
     if (status) filter.status = status;
     if (paymentStatus) filter.paymentStatus = paymentStatus;
-    if (search) {
-      const searchRegex = new RegExp(search.trim(), 'i');
+    if (search && typeof search === 'string' && search.trim() !== '') {
+      const sanitized = escapeRegex(search.trim());
+      const searchRegex = new RegExp(sanitized, 'i');
       filter.$or = [
         { orderNumber: searchRegex },
         { 'customer.name': searchRegex },

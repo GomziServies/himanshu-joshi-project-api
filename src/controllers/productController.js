@@ -6,6 +6,7 @@
 const Product = require('../models/Product');
 const AppError = require('../utils/appError');
 const mongoose = require('mongoose');
+const escapeRegex = require('../utils/escapeRegex');
 
 // Helper to generate URL-safe slugs
 function slugify(text) {
@@ -29,16 +30,17 @@ exports.getPublicProducts = async (req, res, next) => {
 
     const query = { isActive: true };
 
-    if (category) {
-      query.category = new RegExp(`^${category.trim()}$`, 'i');
+    if (category && typeof category === 'string' && category.trim() !== '') {
+      query.category = new RegExp(`^${escapeRegex(category.trim())}$`, 'i');
     }
 
     if (featured === 'true') {
       query.isFeatured = true;
     }
 
-    if (search) {
-      const searchRegex = new RegExp(search.trim(), 'i');
+    if (search && typeof search === 'string' && search.trim() !== '') {
+      const sanitized = escapeRegex(search.trim());
+      const searchRegex = new RegExp(sanitized, 'i');
       query.$or = [
         { title: searchRegex },
         { description: searchRegex },
@@ -124,16 +126,17 @@ exports.getAdminProducts = async (req, res, next) => {
 
     const query = {};
 
-    if (category) {
-      query.category = new RegExp(`^${category.trim()}$`, 'i');
+    if (category && typeof category === 'string' && category.trim() !== '') {
+      query.category = new RegExp(`^${escapeRegex(category.trim())}$`, 'i');
     }
 
     if (isActive !== undefined && isActive !== '') {
       query.isActive = isActive === 'true';
     }
 
-    if (search) {
-      const searchRegex = new RegExp(search.trim(), 'i');
+    if (search && typeof search === 'string' && search.trim() !== '') {
+      const sanitized = escapeRegex(search.trim());
+      const searchRegex = new RegExp(sanitized, 'i');
       query.$or = [
         { title: searchRegex },
         { description: searchRegex }

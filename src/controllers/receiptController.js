@@ -5,6 +5,7 @@
 const TransactionReceipt = require('../models/TransactionReceipt');
 const Order = require('../models/Order');
 const { sendReceiptEmail } = require('../services/emailService');
+const escapeRegex = require('../utils/escapeRegex');
 
 /**
  * GET /api/admin/receipts
@@ -14,16 +15,18 @@ exports.getAllReceipts = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page, 10) || 1;
     const limit = parseInt(req.query.limit, 10) || 20;
-    const search = req.query.search ? req.query.search.trim() : '';
+    const rawSearch = req.query.search && typeof req.query.search === 'string' ? req.query.search.trim() : '';
 
     const filter = {};
-    if (search) {
+    if (rawSearch) {
+      const sanitized = escapeRegex(rawSearch);
+      const searchRegex = new RegExp(sanitized, 'i');
       filter.$or = [
-        { receiptNumber: { $regex: search, $options: 'i' } },
-        { orderNumber: { $regex: search, $options: 'i' } },
-        { 'customerDetails.name': { $regex: search, $options: 'i' } },
-        { 'customerDetails.email': { $regex: search, $options: 'i' } },
-        { gatewayTransactionId: { $regex: search, $options: 'i' } }
+        { receiptNumber: searchRegex },
+        { orderNumber: searchRegex },
+        { 'customerDetails.name': searchRegex },
+        { 'customerDetails.email': searchRegex },
+        { gatewayTransactionId: searchRegex }
       ];
     }
 

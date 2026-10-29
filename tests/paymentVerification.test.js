@@ -150,4 +150,59 @@ describe('Payment Verification API — Cryptographic HMAC-SHA256 & Idempotency',
     const count = await TransactionReceipt.countDocuments({ orderId: testOrder._id });
     expect(count).toBe(1);
   });
+
+  it('REJECTS cross-order token substitution / payment hijacking with HTTP 400', async () => {
+    const victimOrder = await Order.create({
+      orderNumber: 'ORD-20261029-VICTIM',
+      customer: {
+        name: 'Victim Devotee',
+        email: 'victim@temple.org',
+        phone: '+919876543210',
+        sankalpName: 'Victim Devotee',
+        gotra: 'Kashyapa'
+      },
+      items: [{
+        productTitle: 'Maha Sthapana Offering',
+        quantity: 1,
+        unitPrice: 51000,
+        subtotal: 51000
+      }],
+      totalAmount: 51000,
+      currency: 'INR',
+      status: 'CREATED',
+      paymentStatus: 'UNPAID',
+      razorpayOrderId: 'order_victim_expensive_999'
+    });
+
+    const cheapOrderId = 'order_cheap_100';
+    const cheapPaymentId = 'pay_cheap_555';
+    const payload = `${cheapOrderId}|${cheapPaymentId}`;
+    const validSignatureForCheapOrder = crypto
+      .createHmac('sha256', testSecret)
+      .update(payload)
+      .digest('hex');
+
+    // Attacker attempts to mark victim's expensive order as paid using cheap order tokens
+    const response = await request(app)
+      .post('/api/orders/verify-payment')
+      .send({
+        orderId: victimOrder._id.toString(),
+        razorpay_order_id: cheapOrderId,
+        razorpay_payment_id: cheapPaymentId,
+        razorpay_signature: validSignatureForCheapOrder
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body.success).toBe(false);
+    expect(response.body.message).toMatch(/gateway order id does not match order record/i);
+
+    // Assert victim order remains UNPAID in DB
+    const unchangedOrder = await Order.findById(victimOrder._id);
+    expect(unchangedOrder.status).toBe('CREATED');
+    expect(unchangedOrder.paymentStatus).toBe('UNPAID');
+
+    // Assert no receipt was generated
+    const receipt = await TransactionReceipt.findOne({ orderId: victimOrder._id });
+    expect(receipt).toBeNull();
+  });
 });

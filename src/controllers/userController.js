@@ -7,6 +7,7 @@ const User = require('../models/User');
 const Order = require('../models/Order');
 const AppError = require('../utils/appError');
 const mongoose = require('mongoose');
+const escapeRegex = require('../utils/escapeRegex');
 
 /**
  * GET /api/admin/users
@@ -26,8 +27,9 @@ exports.getAdminUsers = async (req, res, next) => {
       query.status = status;
     }
 
-    if (search) {
-      const searchRegex = new RegExp(search.trim(), 'i');
+    if (search && typeof search === 'string' && search.trim() !== '') {
+      const sanitized = escapeRegex(search.trim());
+      const searchRegex = new RegExp(sanitized, 'i');
       query.$or = [
         { name: searchRegex },
         { email: searchRegex },

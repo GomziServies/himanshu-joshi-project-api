@@ -10,7 +10,7 @@ router.post('/verify-payment', orderController.verifyPayment);
 
 // Admin-only order inspection and management
 router.get('/', protect, adminOnly, orderController.getAdminOrders);
-router.get('/:id', orderController.getOrderById);
+router.get('/:id', protect, adminOnly, orderController.getOrderById);
 router.patch('/:id/status', protect, adminOnly, orderController.updateOrderStatus);
 router.post('/:id/resend-receipt', protect, adminOnly, receiptController.resendReceiptEmail);
 
