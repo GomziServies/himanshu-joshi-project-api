@@ -2,6 +2,7 @@
  * Consecrated Vedic Temple HTML Email Receipt Template
  * Styled in sacred temple aesthetic: Deep Saffron (#D97706), Golden Amber (#F59E0B), 
  * Sanctum Maroon (#78350F), and Warm Ivory (#FFFBEB).
+ * Entity: Salahkareshwar Mahadev Tirth (पुण्य पासपोर्ट)
  */
 
 function formatCurrency(amount) {
@@ -50,7 +51,7 @@ function generateReceiptHtml(order, receipt) {
   const itemRows = items.map((item) => `
     <tr style="border-bottom: 1px solid #FDE68A;">
       <td style="padding: 12px 8px; color: #1F2937; font-size: 14px; font-weight: 500;">
-        ${escapeHtml(item.title || item.productTitle || 'Sacred Temple Offering')}
+        ${escapeHtml(item.title || item.productTitle || 'Sacred Shivling Sthapana Offering')}
       </td>
       <td style="padding: 12px 8px; text-align: center; color: #4B5563; font-size: 14px;">
         ${item.quantity || 1}
@@ -69,7 +70,7 @@ function generateReceiptHtml(order, receipt) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Consecrated Offering Receipt — Shree Mandir Trust</title>
+  <title>Consecrated Offering Receipt — Salahkareshwar Mahadev Tirth (पुण्य पासपोर्ट)</title>
 </head>
 <body style="margin: 0; padding: 0; background-color: #FAF5EE; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #2D3748;">
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #FAF5EE; padding: 30px 10px;">
@@ -83,10 +84,13 @@ function generateReceiptHtml(order, receipt) {
             <td style="background: linear-gradient(135deg, #78350F 0%, #B45309 50%, #D97706 100%); padding: 32px 24px; text-align: center; color: #FFFFFF;">
               <div style="font-size: 38px; line-height: 1; margin-bottom: 8px; color: #FDE68A;">ॐ</div>
               <h1 style="margin: 0 0 6px 0; font-size: 24px; font-weight: 700; letter-spacing: 0.5px; color: #FFFFFF;">
-                श्री शिव मन्दिर एवं सनातन सेवा ट्रस्ट
+                श्री सलाहकारेश्वर महादेव तीर्थ
               </h1>
-              <p style="margin: 0; font-size: 13px; color: #FDE68A; text-transform: uppercase; letter-spacing: 1.5px;">
-                Consecrated Seva Receipt & Sankalp Acknowledgment
+              <p style="margin: 0; font-size: 13px; color: #FDE68A; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600;">
+                पुण्य पासपोर्ट (PUNYA PASSPORT) • CONSECRATED SEVA RECEIPT
+              </p>
+              <p style="margin: 6px 0 0 0; font-size: 11px; color: #FEF3C7; letter-spacing: 0.5px;">
+                Gotri, Vadodara (Gujarat) • PAN: ABETS6872M • Udyam: UDYAM-GJ-24-0064289
               </p>
             </td>
           </tr>
@@ -95,11 +99,10 @@ function generateReceiptHtml(order, receipt) {
           <tr>
             <td style="background-color: #FFFBEB; padding: 18px 24px; border-bottom: 1px solid #FDE68A; text-align: center;">
               <p style="margin: 0; font-size: 15px; font-style: italic; color: #92400E; font-weight: 500;">
-                "कर्पूरगौरं करुणावतारं संसारसारम् भुजगेन्द्रहारम्।<br>
-                सदावसन्तं हृदयारविन्दे भवं भवानीसहितं नमामि॥"
+                "ॐ त्र्यम्बकं यजामहे सुगन्धिं पुष्टिवर्धनम्। उर्वारुकमिव बन्धनान्मृत्योर्मुक्षीय माऽमृतात्॥"
               </p>
               <p style="margin: 6px 0 0 0; font-size: 13px; color: #B45309;">
-                May Lord Shiva grant longevity, spiritual peace, and prosperity to you and your lineage.
+                May Lord Mahadev grant supreme longevity, spiritual sanctity, and prosperity to you and your lineage.
               </p>
             </td>
           </tr>
@@ -128,7 +131,7 @@ function generateReceiptHtml(order, receipt) {
                   </td>
                   <td width="50%" valign="top" style="padding-left: 12px; border-left: 1px solid #FDE68A;">
                     <h3 style="margin: 0 0 8px 0; font-size: 12px; text-transform: uppercase; color: #92400E; letter-spacing: 1px;">
-                      Transaction Audit
+                      Transaction Audit & Settlement
                     </h3>
                     <p style="margin: 0 0 4px 0; font-size: 13px; color: #4B5563;">
                       <strong>Receipt No:</strong> <span style="font-family: monospace; color: #92400E; font-weight: 700;">${escapeHtml(receipt?.receiptNumber || 'N/A')}</span>
@@ -177,15 +180,25 @@ function generateReceiptHtml(order, receipt) {
             </td>
           </tr>
 
+          <!-- Official Bank Settlement Details -->
+          <tr>
+            <td style="padding: 0 24px 20px 24px;">
+              <div style="background-color: #FEF3C7; border: 1px solid #FDE68A; border-radius: 8px; padding: 12px 16px; font-size: 12px; color: #78350F;">
+                <strong>Official Bank Settlement:</strong> Kotak Mahindra Bank, Gotri Branch, Vadodara | 
+                A/C: <strong>2847327173</strong> | IFSC: <strong>KKBK0002747</strong> | UPI: <strong>Salahkareshwar@kotak</strong>
+              </div>
+            </td>
+          </tr>
+
           <!-- Seal of Authenticity -->
           <tr>
             <td style="padding: 0 24px 24px 24px;">
               <div style="background-color: #FDFBF7; border: 1px dashed #D97706; border-radius: 8px; padding: 16px; text-align: center;">
                 <p style="margin: 0 0 6px 0; font-size: 13px; font-weight: 600; color: #78350F;">
-                  AUTHENTICATED TEMPLE SEVA RECORD
+                  AUTHENTICATED PUNYA PASSPORT TEMPLE SEVA RECORD
                 </p>
                 <p style="margin: 0; font-size: 12px; color: #6B7280; line-height: 1.5;">
-                  This is an electronically generated and cryptographically verified tax-exempt receipt.<br>
+                  This is an electronically generated and cryptographically verified sacred receipt.<br>
                   Prasad packaging and ceremonial sanctum dispatch will be initiated per Vedic muhurta schedule.
                 </p>
               </div>
@@ -195,11 +208,14 @@ function generateReceiptHtml(order, receipt) {
           <!-- Footer -->
           <tr>
             <td style="background-color: #F3F4F6; padding: 18px 24px; text-align: center; font-size: 12px; color: #6B7280; border-top: 1px solid #E5E7EB;">
-              <p style="margin: 0 0 4px 0;">
-                Shree Mandir Trust · Kashi Sanctum & Sacred Offerings Directorate
+              <p style="margin: 0 0 4px 0; font-weight: 600; color: #374151;">
+                Salahkareshwar Mahadev Tirth (श्री सलाहकारेश्वर महादेव तीर्थ)
+              </p>
+              <p style="margin: 0 0 4px 0; font-size: 11px;">
+                408, Souvenir Flats, Opp GreenField Bungalows, Laxmipura, Gotri Sevasi Road, New Alkapuri, Vadodara, Gujarat - 390012
               </p>
               <p style="margin: 0;">
-                For queries regarding your Sankalp or Prasad tracking, contact: <a href="mailto:support@temple.org" style="color: #B45309; text-decoration: none; font-weight: 600;">support@temple.org</a>
+                Helpline: <a href="tel:+919825600778" style="color: #B45309; text-decoration: none; font-weight: 700;">+91 98256 00778</a> · Email: <a href="mailto:himanshu@meratrainer.com" style="color: #B45309; text-decoration: none; font-weight: 600;">himanshu@meratrainer.com</a>
               </p>
             </td>
           </tr>
@@ -221,7 +237,10 @@ function generateReceiptText(order, receipt) {
   const total = formatCurrency(totalAmount);
   return `
 ======================================================
-SHREE MANDIR TRUST - CONSECRATED OFFERING RECEIPT
+SALAHKARESHWAR MAHADEV TIRTH - PUNYA PASSPORT RECEIPT
+श्री सलाहकारेश्वर महादेव तीर्थ (पुण्य पासपोर्ट)
+408, Souvenir Flats, Gotri Sevasi Road, Vadodara, Gujarat - 390012
+PAN: ABETS6872M | Udyam: UDYAM-GJ-24-0064289
 ======================================================
 Receipt Number: ${receipt?.receiptNumber || 'N/A'}
 Order Number:   ${receipt?.orderNumber || order?.orderNumber || 'N/A'}
@@ -234,9 +253,14 @@ Sankalp Yajman: ${customer.sankalpName || customer.name || 'N/A'}
 Gotra:          ${customer.gotra || 'Kashyapa'}
 Email:          ${customer.email || 'N/A'}
 
-TOTAL AMOUNT PAID: ${total}
+BANK SETTLEMENT:
+Kotak Mahindra Bank, Gotri Branch, Vadodara
+A/C: 2847327173 | IFSC: KKBK0002747 | UPI: Salahkareshwar@kotak
 
-May Lord Shiva bless you and your family with peace and spiritual abundance.
+TOTAL DAKSHINA PAID: ${total}
+
+May Mahadev bless you and your family with longevity, peace, and spiritual abundance.
+Helpline: +91 98256 00778 | himanshu@meratrainer.com
 ======================================================
   `;
 }

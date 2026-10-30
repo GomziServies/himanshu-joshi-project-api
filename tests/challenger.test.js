@@ -374,8 +374,8 @@ describe('EMPIRICAL CHALLENGER SUITE: Backend Auth, DB Resilience & Ledger Immut
       expect(seedAdmin.role).toBe('admin');
 
       const productCount = await Product.countDocuments();
-      // 3 seeded offerings + 1 sampleProduct
-      expect(productCount).toBe(4);
+      // 1 seeded offering (Shivling Sthapana) + 1 sampleProduct
+      expect(productCount).toBe(2);
 
       const bannerCount = await Banner.countDocuments();
       // 3 seeded banners + 1 sampleBanner

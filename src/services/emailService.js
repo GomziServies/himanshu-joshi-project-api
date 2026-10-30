@@ -58,13 +58,13 @@ async function sendReceiptEmail(order, receipt) {
 
     const htmlContent = generateReceiptHtml(order, receipt);
     const textContent = generateReceiptText(order, receipt);
-    const sender = process.env.EMAIL_FROM || '"Shree Temple Offerings" <offerings@temple.org>';
+    const sender = process.env.EMAIL_FROM || '"Salahkareshwar Mahadev Tirth" <himanshu@meratrainer.com>';
 
-    const receiptNum = receipt?.receiptNumber || order?.orderNumber || 'Temple-Receipt';
+    const receiptNum = receipt?.receiptNumber || order?.orderNumber || 'Tirth-Receipt';
     const mailOptions = {
       from: sender,
       to: recipient,
-      subject: `Consecrated Offering Receipt [${receiptNum}] — Shree Shivling Sthapana`,
+      subject: `Consecrated Offering Receipt [${receiptNum}] — Salahkareshwar Mahadev Tirth (पुण्य पासपोर्ट)`,
       text: textContent,
       html: htmlContent
     };

@@ -4,14 +4,14 @@ const User = require('../models/User');
 
 const SEED_OFFERINGS = [
   {
-    title: 'Shivling Sthapana & Rudrabhishek Offering',
+    title: 'Salahkareshwar Shivling Sthapana',
     slug: 'shivling-sthapana',
     category: 'Offering',
-    subtitle: 'Sacred Narmadeshwar Shivling Consecration with Vedic Pran Pratishtha & Bilva Abhishek',
+    subtitle: 'श्री सलाहकारेश्वर महादेव शिवलिंग स्थापना एवं षोडशोपचार वैदिक प्रतिष्ठा',
     price: 5100,
     originalPrice: 7100,
-    shortDescription: 'Consecrate your home with an authentic Narmadeshwar Shivling installed with Vedic rituals, followed by a personalized Rudrabhishek performed in your family Gotra.',
-    description: `The sacred Shivling Sthapana is among the most revered Vedic rituals described in the Shiva Purana. Sourced directly from the sanctified Narmada River bed, the naturally rounded Swayambhu Narmadeshwar stone holds the vibrational resonance of Lord Shiva.
+    shortDescription: 'Consecrate your home with an authentic Swayambhu Shivling blessed at Sri Salahkareshwar Mahadev Tirth, installed with Vedic rituals.',
+    description: `The sacred Shivling Sthapana is performed according to Shiva Agamas at Sri Salahkareshwar Mahadev Tirth in Gotri, Vadodara. The naturally sanctified Swayambhu stone holds the vibrational resonance of Lord Shiva.
 
 During this auspicious Seva:
 1. Ganpati Puja & Punyahavachanam for purifying the altar and removing impediments.
@@ -22,19 +22,18 @@ During this auspicious Seva:
 
 The consecrated Prasad box is carefully packed and dispatched via Speed Post directly to your residence, carrying the holy sanctum blessings to your home temple.`,
     images: [
-      'https://images.unsplash.com/photo-1609342122563-a43ac8917a3a?q=80&w=1200&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=1200&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?q=80&w=1200&auto=format&fit=crop'
+      '/salahkareshwar-shivling.jpg',
+      '/punya-passport-logo.jpg'
     ],
-    featuredImage: 'https://images.unsplash.com/photo-1609342122563-a43ac8917a3a?q=80&w=1200&auto=format&fit=crop',
+    featuredImage: '/salahkareshwar-shivling.jpg',
     inStock: true,
     stockQuantity: 108,
     isActive: true,
     isFeatured: true,
     displayOrder: 1,
     prasadIncludes: [
-      'Consecrated Narmadeshwar Shivling with Brass Yoni Peeth',
-      'Sanctum Bhasma & Holy Gangajal vial from Varanasi',
+      'Consecrated Salahkareshwar Mahadev Shivling with Brass Yoni Peeth',
+      'Sanctum Bhasma & Holy Gangajal vial (100ml)',
       '108-bead Sacred Panchmukhi Rudraksha Mala',
       'Silver-plated Consecrated Bilva Leaf',
       'Blessed Raksha Sutra Thread',
@@ -50,91 +49,14 @@ The consecrated Prasad box is carefully packed and dispatched via Speed Post dir
     ritualDetails: {
       duration: '2.5 Hours',
       priestsCount: 2,
-      sanctum: 'Temple Inner Sanctum & Yagyashala',
+      sanctum: 'Salahkareshwar Mahadev Tirth Sanctum & Yagyashala',
       samagriProvided: true
     },
     specifications: [
-      { key: 'Lingam Stone', value: 'Original Narmada River Natural Pebble' },
+      { key: 'Lingam Stone', value: 'Swayambhu Sanctified Stone (Salahkareshwar)' },
       { key: 'Base (Yoni Peeth)', value: 'Pure Solid Brass with Engraved Tridents' },
       { key: 'Vedic Samhita', value: 'Rigvedic Rudra Sukta & Namakam-Chamakam' },
       { key: 'Fulfillment', value: 'Puja Video Recording + Sanctified Prasad Box' }
-    ]
-  },
-  {
-    title: 'Maha Rudrabhishek & 108 Bilva Archana',
-    slug: 'rudrabhishek-puja',
-    category: 'Puja',
-    subtitle: 'Elaborate Rudra Chanting for Family Health, Peace, and Removal of Graha Dosha',
-    price: 2100,
-    originalPrice: 3100,
-    shortDescription: 'Dedicated Rudrabhishek Seva performed by two Vedic scholars chanting Sri Rudram with fresh cow milk, honey, sugarcane juice, and 108 fresh bilva leaves.',
-    description: 'A powerful spiritual recitation invoking the 11 forms of Lord Shiva for relief from ailments, ancestral peace, and spiritual illumination.',
-    images: [
-      'https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=1200&auto=format&fit=crop'
-    ],
-    featuredImage: 'https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=1200&auto=format&fit=crop',
-    inStock: true,
-    stockQuantity: 500,
-    isActive: true,
-    isFeatured: true,
-    displayOrder: 2,
-    prasadIncludes: [
-      'Rudrabhishek Sacred Bhasma',
-      'Sanctified Dry Fruit Prasad Box',
-      'Blessed Raksha Sutra'
-    ],
-    ritualsIncluded: [
-      'Sri Rudram Recitation',
-      'Panchamrit Snan',
-      'Bilva Patra Samarpana'
-    ],
-    ritualDetails: {
-      duration: '1.5 Hours',
-      priestsCount: 2,
-      sanctum: 'Shiva Mandapam',
-      samagriProvided: true
-    },
-    specifications: [
-      { key: 'Ritual Type', value: 'Panchamrit Rudrabhishek' },
-      { key: 'Chanting', value: 'Namakam Chamakam Complete Recitation' }
-    ]
-  },
-  {
-    title: 'Maha Mrityunjaya Jaap & Havan (1,100 Chants)',
-    slug: 'maha-mrityunjaya-jaap',
-    category: 'Ritual',
-    subtitle: 'Intensive Vedic Havan for Longevity, Protection, and Vital Energy',
-    price: 11000,
-    originalPrice: 15000,
-    shortDescription: 'Consecrated Yagya with 1,100 sacred oblations into the consecrated fire pit by 3 priests for supreme spiritual protection and recovery.',
-    description: 'The Maha Mrityunjaya Mantra is the great death-conquering mantra from the Rigveda, generating healing vibrations that dissolve fear and negativity.',
-    images: [
-      'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?q=80&w=1200&auto=format&fit=crop'
-    ],
-    featuredImage: 'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?q=80&w=1200&auto=format&fit=crop',
-    inStock: true,
-    stockQuantity: 50,
-    isActive: true,
-    isFeatured: false,
-    displayOrder: 3,
-    prasadIncludes: [
-      'Havan Bhasma',
-      'Panchamrit Prasad',
-      'Blessed Copper Yantra'
-    ],
-    ritualsIncluded: [
-      '1,100 Maha Mrityunjaya Chants',
-      'Vedic Havan with Pure Ghee',
-      'Purna Ahuti'
-    ],
-    ritualDetails: {
-      duration: '3.5 Hours',
-      priestsCount: 3,
-      sanctum: 'Yagya Shala',
-      samagriProvided: true
-    },
-    specifications: [
-      { key: 'Oblations', value: '1,100 Ahutis with Ghee and Sacred Herbs' }
     ]
   }
 ];
@@ -142,7 +64,7 @@ The consecrated Prasad box is carefully packed and dispatched via Speed Post dir
 const SEED_BANNERS = [
   {
     title: 'Maha Shivling Sthapana & Vedic Abhishek',
-    subtitle: 'Invite Divine Auspiciousness, Peace & Prosperity into your home with consecrated Narmadeshwar Shivling',
+    subtitle: 'Invite Divine Auspiciousness, Peace & Prosperity into your home with consecrated Salahkareshwar Shivling',
     imageUrl: 'https://images.unsplash.com/photo-1609342122563-a43ac8917a3a?q=80&w=1600&auto=format&fit=crop',
     ctaText: 'Book Seva Now',
     ctaLink: '/offerings/shivling-sthapana',
@@ -161,7 +83,7 @@ const SEED_BANNERS = [
     isActive: true
   },
   {
-    title: 'Authentic Vedic Vidhi & Pure Narmada Prasad',
+    title: 'Authentic Vedic Vidhi & Sanctified Temple Prasad',
     subtitle: 'Every offering is performed strictly according to Shastras by learned Kashi Brahmins',
     imageUrl: 'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?q=80&w=1600&auto=format&fit=crop',
     ctaText: 'View All Offerings',

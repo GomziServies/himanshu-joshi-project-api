@@ -36,7 +36,7 @@ describe('Automated Email Receipt Engine & Admin Resend', () => {
         gotra: 'Shandilya'
       },
       items: [{
-        productTitle: 'Narmadeshwar Shivling Sthapana Offering',
+        productTitle: 'Salahkareshwar Shivling Sthapana Offering',
         quantity: 1,
         unitPrice: 5100,
         subtotal: 5100
@@ -55,7 +55,7 @@ describe('Automated Email Receipt Engine & Admin Resend', () => {
       orderNumber: paidOrder.orderNumber,
       customerDetails: paidOrder.customer,
       itemizedList: [{
-        title: 'Narmadeshwar Shivling Sthapana Offering',
+        title: 'Salahkareshwar Shivling Sthapana Offering',
         quantity: 1,
         unitPrice: 5100,
         subtotal: 5100
@@ -73,7 +73,7 @@ describe('Automated Email Receipt Engine & Admin Resend', () => {
     expect(html).toContain('ॐ');
     expect(html).toContain('Shandilya');
     expect(html).toContain('Sunita Devi &amp; Family');
-    expect(html).toContain('Narmadeshwar Shivling Sthapana Offering');
+    expect(html).toContain('Salahkareshwar Shivling Sthapana Offering');
     expect(html).toContain('₹5,100');
   });
 

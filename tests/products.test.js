@@ -27,7 +27,7 @@ describe('Products & Offerings Catalog API', () => {
       title: 'Shivling Sthapana & Rudrabhishek Offering',
       slug: 'shivling-sthapana',
       category: 'Offering',
-      description: 'Consecrated Narmadeshwar Shivling with Vedic Pran Pratishtha.',
+      description: 'Consecrated Salahkareshwar Mahadev Shivling with Vedic Pran Pratishtha.',
       price: 5100,
       stockQuantity: 108,
       isActive: true,
