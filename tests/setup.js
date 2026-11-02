@@ -14,6 +14,8 @@ beforeAll(async () => {
   process.env.JWT_SECRET = 'test_jwt_secret_key_12345';
   process.env.RAZORPAY_KEY_SECRET = 'test_razorpay_secret_67890';
   process.env.DEMO_PAYMENT_ENABLED = 'true';
+  process.env.ADMIN_DEFAULT_EMAIL = 'admin@temple.org';
+  process.env.ADMIN_DEFAULT_PASSWORD = 'test_admin_password';
 
   try {
     mongoServer = await MongoMemoryServer.create({

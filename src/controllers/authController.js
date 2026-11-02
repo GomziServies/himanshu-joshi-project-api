@@ -12,7 +12,7 @@ const AppError = require('../utils/appError');
  * Signs JWT token with standard payload and expiration
  */
 const signToken = (user) => {
-  const secret = process.env.JWT_SECRET || 'super_secret_temple_platform_jwt_key_shree_shivling_2026_devotee_auth';
+  const secret = process.env.JWT_SECRET;
   const expiresIn = process.env.JWT_EXPIRES_IN || '7d';
   return jwt.sign(
     {

@@ -140,6 +140,11 @@ const orderSchema = new mongoose.Schema(
       type: String,
       default: 'Razorpay'
     },
+    // Created in demo mode: no money moved, so it is excluded from revenue totals
+    isTest: {
+      type: Boolean,
+      default: false
+    },
     razorpayOrderId: {
       type: String,
       index: true,

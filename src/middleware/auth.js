@@ -24,8 +24,7 @@ exports.protect = async (req, res, next) => {
     }
 
     // 2. Verify JWT signature & expiration
-    const secret = process.env.JWT_SECRET || 'super_secret_temple_platform_jwt_key_shree_shivling_2026_devotee_auth';
-    const decoded = jwt.verify(token, secret);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // 3. Ensure user still exists in database
     const currentUser = await User.findById(decoded.id).select('+role +isActive +status');

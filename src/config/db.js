@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 let mongoMemoryServer = null;
 
 /**
- * Establishes Mongoose connection with automatic in-memory fallback.
+ * Establishes Mongoose connection.
+ * Never falls back to in-memory on a connection failure: payment records would vanish on restart.
+ * The in-memory server only runs when explicitly requested (USE_IN_MEMORY_DB=true) or under test.
  * @returns {Promise<mongoose.Connection>}
  */
 async function connectDB() {
@@ -14,21 +16,20 @@ async function connectDB() {
   const configuredUri = process.env.MONGODB_URI;
   const isExplicitMemory = process.env.USE_IN_MEMORY_DB === 'true' || process.env.NODE_ENV === 'test';
 
-  if (!isExplicitMemory && configuredUri) {
-    try {
-      console.log(`[Database] Attempting connection to MongoDB at: ${configuredUri.split('@').pop()}`);
-      await mongoose.connect(configuredUri, {
-        serverSelectionTimeoutMS: 2500,
-        connectTimeoutMS: 2500
-      });
-      console.log('[Database] Successfully connected to external MongoDB.');
-      return mongoose.connection;
-    } catch (err) {
-      console.warn(`[Database] External MongoDB connection failed (${err.message}). Falling back to in-memory MongoDB...`);
+  if (!isExplicitMemory) {
+    if (!configuredUri) {
+      throw new Error('MONGODB_URI is not set');
     }
+    console.log(`[Database] Attempting connection to MongoDB at: ${configuredUri.split('@').pop()}`);
+    await mongoose.connect(configuredUri, {
+      serverSelectionTimeoutMS: 15000,
+      connectTimeoutMS: 15000
+    });
+    console.log('[Database] Successfully connected to external MongoDB.');
+    return mongoose.connection;
   }
 
-  // In-Memory Fallback
+  // Explicit In-Memory Mode
   try {
     const { MongoMemoryServer } = require('mongodb-memory-server');
     if (!mongoMemoryServer) {

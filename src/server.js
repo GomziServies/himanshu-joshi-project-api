@@ -14,9 +14,19 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 
 let server;
 
+function assertProductionConfig() {
+  if (NODE_ENV !== 'production') return;
+  const missing = ['JWT_SECRET', 'MONGODB_URI', 'RAZORPAY_KEY_ID', 'RAZORPAY_KEY_SECRET'].filter((key) => !process.env[key]);
+  if (missing.length > 0) {
+    throw new Error(`Missing required production environment variables: ${missing.join(', ')}`);
+  }
+}
+
 async function startServer() {
   try {
-    // 1. Establish database connection (local, Atlas, or in-memory fallback)
+    assertProductionConfig();
+
+    // 1. Establish database connection (Atlas/local, or in-memory when USE_IN_MEMORY_DB=true)
     await connectDB();
     console.log('[Database] MongoDB connection established successfully');
 

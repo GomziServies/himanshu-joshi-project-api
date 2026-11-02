@@ -9,12 +9,16 @@ const User = require('../models/User');
 
 exports.getAdminStats = async (req, res, next) => {
   try {
-    const [totalProducts, totalUsers, totalOrders, paidOrdersSummary, recentOrders] = await Promise.all([
+    const [totalProducts, totalUsers, totalOrders, testPaidSummary, paidOrdersSummary, recentOrders] = await Promise.all([
       Product.countDocuments(),
       User.countDocuments({ role: 'customer' }),
       Order.countDocuments(),
       Order.aggregate([
-        { $match: { status: 'PAID' } },
+        { $match: { status: 'PAID', isTest: true } },
+        { $group: { _id: null, totalRevenue: { $sum: '$totalAmount' }, count: { $sum: 1 } } }
+      ]),
+      Order.aggregate([
+        { $match: { status: 'PAID', isTest: { $ne: true } } },
         { $group: { _id: null, totalRevenue: { $sum: '$totalAmount' }, count: { $sum: 1 } } }
       ]),
       Order.find()
@@ -33,6 +37,8 @@ exports.getAdminStats = async (req, res, next) => {
         totalRevenue: revenue,
         totalOrders,
         paidOrdersCount: paidCount,
+        testRevenue: testPaidSummary.length > 0 ? testPaidSummary[0].totalRevenue : 0,
+        testPaidCount: testPaidSummary.length > 0 ? testPaidSummary[0].count : 0,
         totalProducts,
         totalUsers,
         recentOrders: recentOrders || []

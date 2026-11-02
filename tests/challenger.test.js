@@ -374,12 +374,33 @@ describe('EMPIRICAL CHALLENGER SUITE: Backend Auth, DB Resilience & Ledger Immut
       expect(seedAdmin.role).toBe('admin');
 
       const productCount = await Product.countDocuments();
-      // 1 seeded offering (Shivling Sthapana) + 1 sampleProduct
+      // 1 seeded offering (Shivling at ₹501) + 1 sampleProduct
       expect(productCount).toBe(2);
+      const seededProduct = await Product.findOne({ slug: 'salahkareshwar-shivling' });
+      expect(seededProduct.price).toBe(501);
 
       const bannerCount = await Banner.countDocuments();
-      // 3 seeded banners + 1 sampleBanner
-      expect(bannerCount).toBe(4);
+      // Banners are not seeded; only the sampleBanner exists
+      expect(bannerCount).toBe(1);
+    });
+
+    it('does not overwrite a price changed from the admin panel when seeding again', async () => {
+      await seedDatabase();
+      await Product.updateOne({ slug: 'salahkareshwar-shivling' }, { price: 701 });
+      await seedDatabase();
+      const seededProduct = await Product.findOne({ slug: 'salahkareshwar-shivling' });
+      expect(seededProduct.price).toBe(701);
+    });
+
+    it('does not create an administrator when ADMIN_DEFAULT_PASSWORD is missing', async () => {
+      const saved = process.env.ADMIN_DEFAULT_PASSWORD;
+      delete process.env.ADMIN_DEFAULT_PASSWORD;
+      try {
+        await seedDatabase();
+        expect(await User.findOne({ email: 'admin@temple.org' })).toBeNull();
+      } finally {
+        process.env.ADMIN_DEFAULT_PASSWORD = saved;
+      }
     });
 
     it('verifies MongoMemoryServer initializes when connection is in readyState === 1', async () => {

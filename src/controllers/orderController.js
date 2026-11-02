@@ -11,6 +11,8 @@ const { createRazorpayOrder, verifyPaymentSignature } = require('../services/raz
 const { sendReceiptEmail } = require('../services/emailService');
 const escapeRegex = require('../utils/escapeRegex');
 
+const MAX_QUANTITY_PER_ITEM = 20;
+
 /**
  * POST /api/orders/create-order
  * Validates items against DB, computes authoritative sum in paise, creates Razorpay order.
@@ -67,6 +69,13 @@ exports.createOrder = async (req, res, next) => {
       }
 
       const quantity = Math.max(1, parseInt(item.quantity, 10) || 1);
+      if (quantity > MAX_QUANTITY_PER_ITEM) {
+        return res.status(400).json({
+          success: false,
+          message: `You can order at most ${MAX_QUANTITY_PER_ITEM} of "${product.title}" at a time`
+        });
+      }
+
       const unitPrice = product.price; // AUTHORITATIVE DATABASE PRICE
       const subtotal = unitPrice * quantity;
       calculatedTotalINR += subtotal;
@@ -91,9 +100,9 @@ exports.createOrder = async (req, res, next) => {
     // 4. Exact calculation in paise (INR * 100)
     const amountInPaise = Math.round(calculatedTotalINR * 100);
 
-    // 5. Generate unique temple order number: ORD-YYYYMMDD-XXXX
+    // 5. Generate unique temple order number: ORD-YYYYMMDD-XXXXXX
     const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-    const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+    const randomSuffix = crypto.randomBytes(3).toString('hex').toUpperCase();
     const orderNumber = `ORD-${dateStr}-${randomSuffix}`;
 
     // 6. Persist order in MongoDB
@@ -130,7 +139,9 @@ exports.createOrder = async (req, res, next) => {
       }
     });
 
+    const isTest = Boolean(rzpOrder.isDemo);
     order.razorpayOrderId = rzpOrder.id;
+    order.isTest = isTest;
     await order.save();
 
     return res.status(201).json({
@@ -140,7 +151,8 @@ exports.createOrder = async (req, res, next) => {
       razorpayOrderId: rzpOrder.id,
       amount: amountInPaise,
       currency: 'INR',
-      key: process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder'
+      key: process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder',
+      isDemo: isTest
     });
   } catch (error) {
     next(error);
@@ -230,7 +242,7 @@ exports.verifyPayment = async (req, res, next) => {
 
     // 5. Create Immutable TransactionReceipt
     const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-    const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+    const randomSuffix = crypto.randomBytes(3).toString('hex').toUpperCase();
     const receiptNumber = `RCPT-${dateStr}-${randomSuffix}`;
 
     const receipt = new TransactionReceipt({
@@ -357,8 +369,9 @@ exports.getAdminOrders = async (req, res, next) => {
     const { status, paymentStatus, search, page = 1, limit = 20 } = req.query;
 
     const filter = {};
-    if (status) filter.status = status;
-    if (paymentStatus) filter.paymentStatus = paymentStatus;
+    // status accepts one value or a comma-separated list (e.g. CREATED,PENDING,FAILED)
+    if (status && typeof status === 'string') filter.status = { $in: status.split(',') };
+    if (paymentStatus && typeof paymentStatus === 'string') filter.paymentStatus = paymentStatus;
     if (search && typeof search === 'string' && search.trim() !== '') {
       const sanitized = escapeRegex(search.trim());
       const searchRegex = new RegExp(sanitized, 'i');

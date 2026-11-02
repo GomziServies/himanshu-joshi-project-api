@@ -16,7 +16,8 @@ function slugify(text) {
     .trim()
     .replace(/\s+/g, '-')        // Replace spaces with -
     .replace(/[^\w\-]+/g, '')    // Remove all non-word chars
-    .replace(/\-\-+/g, '-');     // Replace multiple - with single -
+    .replace(/\-\-+/g, '-')      // Replace multiple - with single -
+    .replace(/^-+|-+$/g, '');    // Trim leading and trailing -
 }
 
 /**
@@ -207,8 +208,8 @@ exports.createProduct = async (req, res, next) => {
       return next(new AppError('Please provide title, price, and description for the offering.', 400));
     }
 
-    // Auto-generate unique slug if not provided
-    let finalSlug = slug ? slugify(slug) : slugify(title);
+    // Auto-generate unique slug if not provided (a Hindi-only title slugifies to an empty string)
+    let finalSlug = (slug ? slugify(slug) : slugify(title)) || `product-${Date.now().toString().slice(-6)}`;
     const existingSlug = await Product.findOne({ slug: finalSlug });
     if (existingSlug) {
       finalSlug = `${finalSlug}-${Date.now().toString().slice(-4)}`;
@@ -258,10 +259,8 @@ exports.updateProduct = async (req, res, next) => {
       return next(new AppError(`Invalid offering ID format: ${id}`, 400));
     }
 
+    // Renaming keeps the existing slug so the product's URL stays stable
     const updates = { ...req.body };
-    if (updates.title && !updates.slug) {
-      updates.slug = slugify(updates.title);
-    }
 
     const product = await Product.findByIdAndUpdate(id, updates, {
       new: true,

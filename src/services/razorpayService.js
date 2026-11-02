@@ -18,9 +18,11 @@ function getRazorpayInstance() {
 }
 
 /**
- * Checks whether system is running in demo/test fallback mode
+ * Checks whether system is running in demo/test fallback mode.
+ * Demo mode accepts a mock signature, so it can never be active in production.
  */
 function isDemoMode() {
+  if (process.env.NODE_ENV === 'production') return false;
   const isDemo = process.env.DEMO_PAYMENT_ENABLED === 'true';
   const hasPlaceholderKey = !process.env.RAZORPAY_KEY_ID || 
                             process.env.RAZORPAY_KEY_ID.includes('YourTestKeyId') ||
