@@ -17,7 +17,6 @@ describe('Payment Verification API — Cryptographic HMAC-SHA256 & Idempotency',
         email: 'devotee@temple.org',
         phone: '+919876543210',
         sankalpName: 'Vedic Devotee',
-        gotra: 'Vashistha'
       },
       items: [{
         productTitle: 'Shivling Sthapana Offering',
@@ -67,7 +66,6 @@ describe('Payment Verification API — Cryptographic HMAC-SHA256 & Idempotency',
     const receipt = await TransactionReceipt.findOne({ orderId: testOrder._id });
     expect(receipt).not.toBeNull();
     expect(receipt.amountPaid).toBe(5100);
-    expect(receipt.customerDetails.gotra).toBe('Vashistha');
   });
 
   it('REJECTS tampered cryptographic signature with HTTP 400 Bad Request', async () => {
@@ -159,7 +157,6 @@ describe('Payment Verification API — Cryptographic HMAC-SHA256 & Idempotency',
         email: 'victim@temple.org',
         phone: '+919876543210',
         sankalpName: 'Victim Devotee',
-        gotra: 'Kashyapa'
       },
       items: [{
         productTitle: 'Maha Sthapana Offering',

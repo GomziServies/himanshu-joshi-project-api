@@ -93,7 +93,6 @@ describe('EMPIRICAL CHALLENGER SUITE: Backend Auth, DB Resilience & Ledger Immut
         email: 'ramesh.devotee@temple.org',
         phone: '+91 9876543210',
         sankalpName: 'Ramesh Sharma',
-        gotra: 'Kashyapa'
       },
       items: [
         {
@@ -350,7 +349,6 @@ describe('EMPIRICAL CHALLENGER SUITE: Backend Auth, DB Resilience & Ledger Immut
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
       expect(res.body.data._id.toString()).toBe(sampleOrder._id.toString());
-      expect(res.body.data.customer.gotra).toBe('Kashyapa');
     });
   });
 

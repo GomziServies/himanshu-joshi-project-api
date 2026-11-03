@@ -27,7 +27,6 @@ describe('Order Creation API — Server-Side Price Calculation & Anti-Tampering'
           email: 'ramesh@example.com',
           phone: '+919876543210',
           sankalpName: 'Ramesh Sharma & Family',
-          gotra: 'Bharadwaj'
         },
         items: [
           { productId: sacredOffering._id.toString(), quantity: 2 }

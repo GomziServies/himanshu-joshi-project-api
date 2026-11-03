@@ -34,15 +34,7 @@ const transactionReceiptSchema = new mongoose.Schema(
       name: { type: String, required: true },
       email: { type: String, required: true },
       phone: { type: String, required: true },
-      sankalpName: { type: String },
-      gotra: { type: String },
-      address: {
-        street: String,
-        city: String,
-        state: String,
-        postalCode: String,
-        country: String
-      }
+      sankalpName: { type: String }
     },
     itemizedList: {
       type: [receiptLineItemSchema],

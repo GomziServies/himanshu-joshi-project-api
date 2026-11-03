@@ -33,7 +33,6 @@ describe('Automated Email Receipt Engine & Admin Resend', () => {
         email: 'sunita@example.com',
         phone: '+919876500000',
         sankalpName: 'Sunita Devi & Family',
-        gotra: 'Shandilya'
       },
       items: [{
         productTitle: 'Salahkareshwar Shivling Sthapana Offering',
@@ -68,10 +67,9 @@ describe('Automated Email Receipt Engine & Admin Resend', () => {
     });
   });
 
-  it('renders auspicious temple HTML template with Om symbol, Gotra, and itemized total', () => {
+  it('renders auspicious temple HTML template with Om symbol and itemized total', () => {
     const html = generateReceiptHtml(paidOrder, receiptDoc);
     expect(html).toContain('ॐ');
-    expect(html).toContain('Shandilya');
     expect(html).toContain('Sunita Devi &amp; Family');
     expect(html).toContain('Salahkareshwar Shivling Sthapana Offering');
     expect(html).toContain('₹5,100');

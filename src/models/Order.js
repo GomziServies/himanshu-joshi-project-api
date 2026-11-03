@@ -57,28 +57,6 @@ const customerSchema = new mongoose.Schema(
       type: String,
       default: function() { return this.name; },
       trim: true
-    },
-    gotra: {
-      type: String,
-      trim: true,
-      default: 'Kashyapa' // Auspicious default if family Gotra is unknown
-    },
-    nakshatra: {
-      type: String,
-      trim: true,
-      default: ''
-    },
-    prayerIntention: {
-      type: String,
-      trim: true,
-      default: 'Family Peace, Health & Spiritual Auspiciousness'
-    },
-    address: {
-      street: { type: String, default: '' },
-      city: { type: String, default: '' },
-      state: { type: String, default: '' },
-      postalCode: { type: String, default: '' },
-      country: { type: String, default: 'India' }
     }
   },
   { _id: false }

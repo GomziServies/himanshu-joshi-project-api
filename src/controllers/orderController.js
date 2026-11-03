@@ -112,11 +112,7 @@ exports.createOrder = async (req, res, next) => {
         name: customer.name.trim(),
         email: customer.email.trim().toLowerCase(),
         phone: customer.phone.trim(),
-        sankalpName: (customer.sankalpName || customer.name).trim(),
-        gotra: (customer.gotra || 'Kashyapa (Default)').trim(),
-        nakshatra: customer.nakshatra ? customer.nakshatra.trim() : '',
-        prayerIntention: customer.prayerIntention ? customer.prayerIntention.trim() : 'Family Peace, Health & Spiritual Auspiciousness',
-        address: customer.address || {}
+        sankalpName: (customer.sankalpName || customer.name).trim()
       },
       userId: req.user ? req.user._id : undefined,
       items: validatedItems,
@@ -253,9 +249,7 @@ exports.verifyPayment = async (req, res, next) => {
         name: order.customer.name,
         email: order.customer.email,
         phone: order.customer.phone,
-        sankalpName: order.customer.sankalpName,
-        gotra: order.customer.gotra,
-        address: order.customer.address
+        sankalpName: order.customer.sankalpName
       },
       itemizedList: order.items.map(item => ({
         title: item.productTitle,

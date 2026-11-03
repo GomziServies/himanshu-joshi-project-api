@@ -122,9 +122,6 @@ function generateReceiptHtml(order, receipt) {
                     <p style="margin: 0 0 4px 0; font-size: 13px; color: #4B5563;">
                       <strong>Sankalp Yajman:</strong> ${escapeHtml(customer.sankalpName || customer.name || 'N/A')}
                     </p>
-                    <p style="margin: 0 0 4px 0; font-size: 13px; color: #4B5563;">
-                      <strong>Gotra:</strong> ${escapeHtml(customer.gotra || 'Kashyapa (Default)')}
-                    </p>
                     <p style="margin: 0; font-size: 13px; color: #4B5563;">
                       <strong>Email:</strong> ${escapeHtml(customer.email || 'N/A')}
                     </p>
@@ -250,7 +247,6 @@ Date:           ${formatDateIST(receipt?.paymentTimestamp || new Date())}
 DEVOTEE SANKALP DETAILS:
 Name:           ${customer.name || 'Devotee'}
 Sankalp Yajman: ${customer.sankalpName || customer.name || 'N/A'}
-Gotra:          ${customer.gotra || 'Kashyapa'}
 Email:          ${customer.email || 'N/A'}
 
 BANK SETTLEMENT:
